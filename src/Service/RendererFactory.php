@@ -37,6 +37,7 @@ class RendererFactory implements FactoryInterface
         $renderer->setEngine($engine);
         $renderer->setSuffix($config['suffix']);
         $renderer->setResolver($resolver);
+        $renderer->setZendHelperPluginManager($container->get('ViewHelperManager'));
 
         return $renderer;
     }
