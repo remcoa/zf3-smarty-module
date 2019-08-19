@@ -67,6 +67,7 @@ class Renderer implements RendererInterface
 
         $smarty = $this->getEngine();
         $smarty->clearAllAssign();
+        $this->engine->assign('this', $this);
         $smarty->assign($values);
 
         $content = $smarty->fetch($file);
