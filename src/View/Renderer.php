@@ -23,6 +23,7 @@ class Renderer implements RendererInterface
      * @var string
      */
     protected $suffix;
+    private $__pluginCache = [];
 
     public function setEngine(Smarty $engine)
     {
@@ -97,4 +98,32 @@ class Renderer implements RendererInterface
     {
         return $this->suffix;
     }
+    
+    public function __call($method, $argv)
+    {
+        if (!isset($this->__pluginCache[$method])) {
+            $this->__pluginCache[$method] = $this->plugin($method);
+        }
+        if (is_callable($this->__pluginCache[$method])) {
+            return call_user_func_array($this->__pluginCache[$method], $argv);
+        }
+        return $this->__pluginCache[$method];
+    }
+
+    public function plugin($name, array $options = null)
+    {
+        return $this->getZendHelperPluginManager()->get($name, $options);
+    }
+
+    public function getZendHelperPluginManager()
+    {
+        return $this->zendHelperPluginManager;
+    }
+
+    public function setZendHelperPluginManager($zendHelperPluginManager)
+    {
+        $this->zendHelperPluginManager = $zendHelperPluginManager;
+        return $this;
+    }
+    
 }
